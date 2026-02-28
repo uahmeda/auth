@@ -1,8 +1,8 @@
-// Заданные учётные данные (в реальном приложении храните на сервере!)
-const validCredentials = {
-    username: "admin",
-    password: "12345"
-};
+// Массив учётных данных: можно добавлять сколько угодно аккаунтов
+const validCredentials = [
+    { username: "admin", password: "12345" },
+    { username: "user", password: "password" }
+];
 
 // Элементы DOM
 const authForm = document.getElementById('authForm');
@@ -14,17 +14,19 @@ const logoutButton = document.getElementById('logout');
 // Обработчик отправки формы
 authForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    // Получаем введённые данные
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
-    // Проверяем учётные данные
-    if (username === validCredentials.username && password === validCredentials.password) {
-        // Успешная авторизация
-        showWelcomeMessage(username);
-    } else {
-        // Ошибка авторизации
+    let isAuthorized = false;
+
+    for (const user of validCredentials) {
+        if (username === user.username && password === user.password) {
+            isAuthorized = true;
+            showWelcomeMessage(username);
+            break;
+        }
+    }
+
+    if (!isAuthorized) {
         errorMessage.textContent = 'Неверный логин или пароль';
     }
 });
